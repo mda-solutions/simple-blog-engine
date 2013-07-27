@@ -29,11 +29,10 @@
 			</ul>
 		</nav>
 
-		<section id="content">
-
-			<article>
-				aqui va todo el contenido del post
-			</article>
+		<section data-bind="foreach: posts, visible: posts().length > 0">
+			
+			<header data-bind="text: title"></header>
+			<article data-bind="text: content"></article>
 
 		</section>
 
@@ -51,23 +50,35 @@
 		    this.date    = ko.observable(data.date);
 		}
 
-		function MenuListViewModel() 
+		function Post(data) 
 		{
-		    // Data
+		    this.title     = ko.observable(data.title);
+		    this.content   = ko.observable(data.content);
+		}			
+
+		function BlogViewModel() 
+		{
+		    // Data items
 		    var self = this;
 		    self.items = ko.observableArray([]);
 		    $.getJSON("engine.php?action=menu", function(data) 
 		    {
 		        var mappedItems = $.map(data, function(item) { return new Item(item) });
 		        self.items(mappedItems);
-		    }); 				  
-		}
+		    });
 
-		ko.applyBindings(new MenuListViewModel());
+		    // Data Posts
+		    self.posts = ko.observableArray([]);
+		    $.getJSON("engine.php?action=posts", function(data) 
+		    {
+		        var mappedPosts = $.map(data, function(post) { return new Post(post) });
+		        self.posts(mappedPosts);
+		    }); 		     				  
+		}	
+
+		ko.applyBindings(new BlogViewModel());			
 
 	</script>
-
-  <!--script src="js/scripts.js"></script-->
 
 </body>
 </html>
