@@ -106,7 +106,7 @@ class Engine
       return array_slice($this->htmls, $init, $items);
    }
 
-   public function getPostsJson($page)
+   public function getPostsJson($page, $all = false, $isjson = true)
    {     
 
       $this->current_page = $page;
@@ -114,7 +114,7 @@ class Engine
       $cont   = 0;
       $folder = $this->settings["folder_entries"];
       $posts  = new stdClass();
-      $htmls  = $this->sliceHtmls();
+      $htmls  = (!$all) ? $this->sliceHtmls() : $this->htmls;
 
       foreach ($htmls as $html) 
       {
@@ -133,7 +133,7 @@ class Engine
         }  
       }
 
-      return json_encode($posts);
+      return ($isjson)? json_encode($posts) : $posts;
    }
 
    public function getContentPostJSON($html)
@@ -195,6 +195,44 @@ class Engine
       }
 
       return json_encode($list);
+   }
+
+   public function getFeedItems()
+   {
+      
+      $items = "";
+
+      $posts = $this->getPostsJson(1, true, false);
+      foreach ($posts as $post) 
+      {
+        $item = self::getFeedItemTemplate();
+
+        $item = str_replace('{TITLE}', $post->title, $item);
+        $item = str_replace('{LINK}', $post->title, $item);
+        $item = str_replace('{DATE}', $post->date, $item);
+        $item = str_replace('{GUID}', $post->title, $item);
+        $item = str_replace('{CONTENT}', htmlspecialchars($post->content), $item);
+        $items .= $item;
+      }
+
+      return $items;
+   }
+
+   private static function getFeedItemTemplate()
+   {
+
+    $feed = 
+    "
+       <item> 
+
+        <title>{TITLE}</title> 
+        <link>{LINK}</link>
+        <pubDate>{DATE}</pubDate> 
+        <guid>{GUID}</guid> 
+        <description>{CONTENT}</description> 
+      </item>
+    ";
+      return $feed;
    }
 
 }
