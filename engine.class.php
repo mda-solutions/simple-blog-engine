@@ -114,24 +114,6 @@ class Engine
       return json_encode($this->settings);
    }
 
-   private function getChunk($chunk)
-   {
-
-      $file    = 'chunks/' . $chunk;
-      $content;
-
-      if(file_exists($file))
-      {
-        $doc = new DOMDocument();
-        $doc->loadHTMLFile($file);
-        $content =  $doc->saveHTML();
-        return $content;
-      } 
-
-      throw new Exception("No existe el chunk " . $chunk, 1);
-                
-   }
-
    public static function titlezr($title)
    {
       $elements = explode('.', $title);
