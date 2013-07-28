@@ -80,6 +80,7 @@
 
 		<div class="sixteen columns" data-bind="foreach: posts, visible: posts().length > 0">
 			<h2 class="remove-bottom" style="margin-top: 10px" data-bind="text: title"></h2>
+			<h5 data-bind="text: date"></h5>
 			<p data-bind="html: content"></p>
 			<hr />
 		</div>
@@ -104,6 +105,7 @@
 		{
 		    this.title     = ko.observable(data.title);
 		    this.content   = ko.observable(data.content);
+		    this.date      = ko.observable(data.date);
 		}			
 
 		function BlogViewModel() 

@@ -97,6 +97,7 @@ class Engine
           $post          = new stdClass();
           $post->title   = self::titlezr($html);
           $post->content = file_get_contents($file);
+          $post->date    =  date ($this->settings['date_format'], filemtime($file));          
 
           $posts->$html = $post;
         }  
