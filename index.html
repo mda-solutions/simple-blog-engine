@@ -81,7 +81,9 @@
 
 		<!-- TEMPLATE PARA LOS POSTS-->
 		<div class="sixteen columns" data-bind="foreach: posts, visible: posts().length > 0">
-			<h2 class="remove-bottom" style="margin-top: 10px" data-bind="text: title"></h2>
+			<a data-bind="attr: { id: id, title: title }">
+			    <h2 class="remove-bottom" style="margin-top: 10px" data-bind="text: title"></h2>
+			</a>			
 			<h5 data-bind="text: date"></h5>
 			<p data-bind="html: content"></p>
 			<hr />
@@ -115,6 +117,7 @@
 		    this.title     = ko.observable(data.title);
 		    this.content   = ko.observable(data.content);
 		    this.date      = ko.observable(data.date);
+		    this.id        = ko.observable(data.id);
 		}			
 
 		function BlogViewModel() 
@@ -142,14 +145,23 @@
 		    	$('#page').val(page);
 
 			    $.getJSON("engine.php?action=posts&page=" + page, function(data) 
-			    {
+			    {			        
+			        var ids = new Array();
+			    	$.each(data, function(key, value)
+		    		{
+		    			ids.push(value.id);
+		    		});
+
 			        var mappedPosts = $.map(data, function(post) { return new Post(post) });
+
 			        if(mappedPosts.length > 0)
 			        {
 				        $.each(mappedPosts, function(key, value)
 			        	{
 			        		self.posts.push(value);
 			        	});
+
+			        	$('html,body').animate({scrollTop: $("#"+ids[0]).offset().top},'slow');
 
 			        	return;
 			        }

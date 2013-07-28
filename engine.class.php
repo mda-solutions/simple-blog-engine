@@ -126,6 +126,7 @@ class Engine
           $post->title   = self::titlezr($html);
           $post->content = file_get_contents($file);
           $post->date    = date ($this->settings['date_format'], filemtime($file));          
+          $post->id      = sprintf('post_%s_%s', $page, $cont);
 
           $posts->$html = $post;
 
