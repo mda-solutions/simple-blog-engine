@@ -88,6 +88,10 @@
 		</div>
 		<!-- TERMINA TEMPLATE PARA LOS POSTS-->
 
+		<div class="sixteen columns">
+			<a id="more_items" href="javascript:void(0);" data-bind="click: getPosts" class="full-width button">Mostrar más Elementos</a>
+			<hr>
+		</div>
 
 
 	</div><!-- container -->
@@ -95,8 +99,10 @@
 
 <!-- End Document
 ================================================== -->
-
+    <input type="hidden" value="1" id="page" name="page" />
 	<script type="text/javascript">
+
+		var page = parseInt($('#page').val());
 
 		function Item(data) 
 		{
@@ -113,22 +119,44 @@
 
 		function BlogViewModel() 
 		{
-		    // Data items
-		    var self = this;
-		    self.items = ko.observableArray([]);
+		    
+		    var self   = this;
+		    self.items = ko.observableArray([]);		    
+		    self.posts = ko.observableArray([]);
+
 		    $.getJSON("engine.php?action=menu", function(data) 
 		    {
 		        var mappedItems = $.map(data, function(item) { return new Item(item) });
 		        self.items(mappedItems);
 		    });
 
-		    // Data Posts
-		    self.posts = ko.observableArray([]);
-		    $.getJSON("engine.php?action=posts", function(data) 
+		    $.getJSON("engine.php?action=posts&page=" + page, function(data) 
 		    {
 		        var mappedPosts = $.map(data, function(post) { return new Post(post) });
 		        self.posts(mappedPosts);
-		    }); 		     				  
+		    }); 
+
+		    self.getPosts = function() 
+		    {
+		    	page ++;
+		    	$('#page').val(page);
+
+			    $.getJSON("engine.php?action=posts&page=" + page, function(data) 
+			    {
+			        var mappedPosts = $.map(data, function(post) { return new Post(post) });
+			        if(mappedPosts.length > 0)
+			        {
+				        $.each(mappedPosts, function(key, value)
+			        	{
+			        		self.posts.push(value);
+			        	});
+
+			        	return;
+			        }
+
+			        $('#more_items').html('Ops! ya no hay más elementos.');
+			    }); 		    	
+		    };		    		     				  
 		}	
 
 		ko.applyBindings(new BlogViewModel());			

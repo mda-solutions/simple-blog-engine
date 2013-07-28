@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * 
+ *     https://github.com/mda-solutions
  *
  * Licensed under the MIT License (the "License"); you may
  * not use this file except in compliance with the License. You may obtain
@@ -19,9 +21,10 @@ class Engine
 {
    
   public $settings_file = "settings.ini";
+  public $htmls         = array();
+  public $current_page;
   public $settings;
   public $files;
-  public $htmls = array();
 
    function __construct() 
    {
@@ -96,24 +99,37 @@ class Engine
       $sorting_function($this->htmls);
    }
 
-   public function getPosts()
+   public function sliceHtmls()
+   {
+      $items = $this->settings["items_per_page"];
+      $init  = ($this->current_page - 1) * $items;
+      return array_slice($this->htmls, $init, $items);
+   }
+
+   public function getPostsJson($page)
    {     
 
+      $this->current_page = $page;
+
+      $cont   = 0;
       $folder = $this->settings["folder_entries"];
       $posts  = new stdClass();
+      $htmls  = $this->sliceHtmls();
 
-      foreach ($this->htmls as $html) 
+      foreach ($htmls as $html) 
       {
         $file = $folder . "/" . $html;
 
         if (file_exists($file)) 
-        {      
+        {                
           $post          = new stdClass();
           $post->title   = self::titlezr($html);
           $post->content = file_get_contents($file);
-          $post->date    =  date ($this->settings['date_format'], filemtime($file));          
+          $post->date    = date ($this->settings['date_format'], filemtime($file));          
 
           $posts->$html = $post;
+
+          $cont ++;
         }  
       }
 

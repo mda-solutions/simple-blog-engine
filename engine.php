@@ -10,6 +10,7 @@
 	$engine = new Engine();
 
 	$action = $_GET['action'];
+	$page   = (!isset($_GET['page'])) ? 1 : (int)$_GET['page'];
 
 	switch ($action) 
 	{
@@ -18,7 +19,7 @@
 			break;
 
 		case 'posts':
-			echo $engine->getPosts();
+			echo $engine->getPostsJson($page);
 			break;			
 		
 		default:
