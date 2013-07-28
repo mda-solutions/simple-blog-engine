@@ -171,8 +171,4 @@ class Engine
       return json_encode($list);
    }
 
-   public function display()
-   {      
-      var_dump($this->getListPostsJSON());
-   }
 }

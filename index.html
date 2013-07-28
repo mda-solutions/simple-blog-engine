@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+	<!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+	<title>MDA - Minimal Blog Engine</title>
+	<meta name="description" content="A super fast and minimal blog engine">
+	<meta name="author" content="mda-solutions">
+
+	<!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="stylesheets/base.css">
+	<link rel="stylesheet" href="stylesheets/skeleton.css">
+	<link rel="stylesheet" href="stylesheets/layout.css">
+
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Favicons
+	================================================== -->
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
+  <script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+  <script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js'></script>
+
+</head>
+<body>
+
+
+
+	<!-- Primary Page Layout
+	================================================== -->
+
+	<!-- Delete everything in this .container and get started on your own site! -->
+
+	<div class="container">
+		<div class="sixteen columns">
+			<h1 class="remove-bottom" style="margin-top: 40px">
+				<img src="https://googledrive.com/host/0B-QqAdv8dXkdb1hZZWF3ZmVuNWs/logo.png">
+			</h1>
+			<h4>Fast & Minimal MDA-Blog Engine 1.0</h4>
+			<hr />
+		</div>
+		<div class="one-third column">
+			<h3>¿Qué es?</h3>
+			<p>
+				El "MDA-Blog Engine" es un motor para publicar un blog muy simple que no requiere instalación de base de datos o de librerías complicadas, únicamente consta de 2 archivos PHP, las publicaciones se hacen mediante archivos de texto o html individuales. No necesitas saber programar o instalar paquetes complejos.
+			</p>
+		</div>
+		<div class="one-third column">
+			<h3>¿Qué necesito?</h3>
+			<p>El "MDA-Blog Engine" solo necesita:</p>
+			<ul class="square">
+				<li><strong>Un servidor web que ejecute PHP 5.2</strong>, Ha sido probado con Apache 2 y PHP 5.2, pero en Windows y IIS no debe haber problema.</li>
+				<li><strong>Una carpeta pública</strong>: puede ser un acceso FTP o incluso en Google Drive, esto para publicar los archivos de texto/html</li>				
+			</ul>
+		</div>
+		<div class="one-third column">
+			<h3>Download</h3>
+			<p>Puedes clonar el repositorio en github: <br />
+				<br>clone https://github.com/mda-solutions/simple-blog-engine.git
+				<br><br> <a href="https://github.com/mda-solutions/simple-blog-engine/archive/master.zip">o simplemente descargar el zip</a>
+			</p>
+		</div>
+
+		<hr />
+
+		<div class="sixteen columns" data-bind="foreach: posts, visible: posts().length > 0">
+			<h2 class="remove-bottom" style="margin-top: 10px" data-bind="text: title"></h2>
+			<p data-bind="html: content"></p>
+			<hr />
+		</div>
+
+
+
+	</div><!-- container -->
+
+
+<!-- End Document
+================================================== -->
+
+	<script type="text/javascript">
+
+		function Item(data) 
+		{
+		    this.title   = ko.observable(data.title);
+		    this.date    = ko.observable(data.date);
+		}
+
+		function Post(data) 
+		{
+		    this.title     = ko.observable(data.title);
+		    this.content   = ko.observable(data.content);
+		}			
+
+		function BlogViewModel() 
+		{
+		    // Data items
+		    var self = this;
+		    self.items = ko.observableArray([]);
+		    $.getJSON("engine.php?action=menu", function(data) 
+		    {
+		        var mappedItems = $.map(data, function(item) { return new Item(item) });
+		        self.items(mappedItems);
+		    });
+
+		    // Data Posts
+		    self.posts = ko.observableArray([]);
+		    $.getJSON("engine.php?action=posts", function(data) 
+		    {
+		        var mappedPosts = $.map(data, function(post) { return new Post(post) });
+		        self.posts(mappedPosts);
+		    }); 		     				  
+		}	
+
+		ko.applyBindings(new BlogViewModel());			
+
+	</script>
+
+</body>
+</html>
