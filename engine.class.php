@@ -44,7 +44,12 @@ class Engine
       if($this->settings["date_format"] == "")
       {
         throw new Exception("date_format no esta definido", 1);        
-      }             
+      } 
+
+      if($this->settings["order"] == "")
+      {
+        throw new Exception("order no esta definido", 1);        
+      }                   
    }
 
    private function readDirectory()
@@ -66,6 +71,14 @@ class Engine
           array_push($this->htmls, $file);  
         }         
       }
+
+      $this->orderHtmls();
+   }
+
+   public function orderHtmls()
+   {
+      $sorting_function = ($this->settings['order'] == "ascendente") ? 'sort' : 'rsort';
+      $sorting_function($this->htmls);
    }
 
    public function getPosts()
