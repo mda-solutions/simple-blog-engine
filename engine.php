@@ -14,9 +14,10 @@
 
 	switch ($action) 
 	{
+
 		case 'menu':
-			echo $engine->getListPostsJSON();
-			break;
+			echo $engine->getPostsJson($page, true);
+			break;	
 
 		case 'posts':
 			echo $engine->getPostsJson($page);

@@ -106,6 +106,22 @@ class Engine
       return array_slice($this->htmls, $init, $items);
    }
 
+   private static function urlfy($string)
+   {
+      $string =   strtolower(trim($string));
+
+      $string = str_replace(' ', '-', $string);
+      $string = str_replace('á', 'a', $string);
+      $string = str_replace('é', 'e', $string);
+      $string = str_replace('í', 'i', $string);
+      $string = str_replace('ó', 'o', $string);
+      $string = str_replace('ú', 'u', $string);
+
+      $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+      
+      return urlencode($string);
+   }
+
    public function getPostsJson($page, $all = false, $isjson = true)
    {     
 
@@ -127,6 +143,7 @@ class Engine
           $post->content = file_get_contents($file);
           $post->date    = date ($this->settings['date_format'], filemtime($file));          
           $post->id      = sprintf('post_%s_%s', $page, $cont);
+          $post->hash    = sprintf('#post_%s_%s/%s', $page, $cont, self::urlfy($post->title));
 
           $posts->$html = $post;
 
@@ -178,24 +195,6 @@ class Engine
       }
 
       return $titlezr;   
-   }
-
-   public function getListPostsJSON()
-   {      
-      $folder = $this->settings["folder_entries"];
-      $list   = new stdClass();
-
-      foreach ($this->htmls as $html) 
-      {
-        $file = $folder . "/" . $html;
-        if (file_exists($file)) 
-        {      
-          $list->$html->date    = date ($this->settings['date_format'], filemtime($file));          
-          $list->$html->title   = self::titlezr($html);
-        }         
-      }
-
-      return json_encode($list);
    }
 
    public function getFeedItems()

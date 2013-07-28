@@ -47,6 +47,17 @@
 	<!-- Delete everything in this .container and get started on your own site! -->
 
 	<div class="container">
+
+		<div class="sixteen columns">
+			<ul data-bind="foreach: items, visible: items().length > 0">
+				<li>
+					<a data-bind="attr: { href: hash, title: title }">
+						<span data-bind="html: title"></span>
+					</a>
+				</li>
+			</ul>
+		</div>
+
 		<div class="sixteen columns">
 			<h1 class="remove-bottom" style="margin-top: 40px">
 				<img src="https://googledrive.com/host/0B-QqAdv8dXkdb1hZZWF3ZmVuNWs/logo.png">
@@ -110,6 +121,7 @@
 		{
 		    this.title   = ko.observable(data.title);
 		    this.date    = ko.observable(data.date);
+		    this.hash    = ko.observable(data.hash);
 		}
 
 		function Post(data) 
@@ -118,6 +130,7 @@
 		    this.content   = ko.observable(data.content);
 		    this.date      = ko.observable(data.date);
 		    this.id        = ko.observable(data.id);
+		    this.hash      = ko.observable(data.hash);
 		}			
 
 		function BlogViewModel() 
@@ -138,6 +151,12 @@
 		        var mappedPosts = $.map(data, function(post) { return new Post(post) });
 		        self.posts(mappedPosts);
 		    }); 
+
+		    self.goHash = function()
+		    {
+
+		    	console.log(this);
+		    }
 
 		    self.getPosts = function() 
 		    {
