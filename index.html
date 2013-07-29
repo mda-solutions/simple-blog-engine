@@ -167,8 +167,22 @@
 				var nums = post.split('_');
 				var page = nums[1];
 
-				console.log(page);
+			    $.getJSON("engine.php?action=posts&page=" + page, function(data) 
+			    {			        
+			        var mappedPosts = $.map(data, function(_post) { return new Post(_post) });
 
+			        if(mappedPosts.length > 0)
+			        {
+				        $.each(mappedPosts, function(key, value)
+			        	{
+			        		self.posts.push(value);
+			        	});
+			        				        	
+			        	return;
+			        }
+
+			        $('#page').val(page);
+			    }); 
 		    	
 		    }
 

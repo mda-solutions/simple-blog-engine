@@ -25,6 +25,7 @@ class Engine
   public $current_page;
   public $settings;
   public $files;
+  public $total_items;
 
    function __construct() 
    {
@@ -90,6 +91,7 @@ class Engine
         }         
       }
 
+      $this->total_items = count($this->htmls);
       $this->orderHtmls();
    }
 
@@ -127,16 +129,16 @@ class Engine
 
       $this->current_page = $page;
 
-      $cont   = 0;
       $folder = $this->settings["folder_entries"];
       $items  = (int)$this->settings["items_per_page"];
+      $cont   = ($all) ? 0 : $this->current_page * $items ;
       $posts  = new stdClass();
       $htmls  = (!$all) ? $this->sliceHtmls() : $this->htmls;
 
       foreach ($htmls as $html) 
       {
         $file      = $folder . "/" . $html;
-        $num       = $cont + 1;
+        $num       = ($all) ? $cont + 1 : $cont;
         $item_page = round($num / $items);
 
         if (file_exists($file)) 
@@ -145,8 +147,8 @@ class Engine
           $post->title   = self::titlezr($html);
           $post->content = file_get_contents($file);
           $post->date    = date ($this->settings['date_format'], filemtime($file));          
-          $post->id      = sprintf('post_%s_%s', $item_page, $num);
-          $post->hash    = sprintf('#post_%s_%s/%s', $item_page, $num, self::urlfy($post->title));
+          $post->id      = sprintf('post_%s_%s', $item_page, ($all) ? $num : $num - 1);
+          $post->hash    = sprintf('#post_%s_%s/%s', $item_page, ($all) ? $num : $num - 1, self::urlfy($post->title));
 
           $posts->$html = $post;
 
