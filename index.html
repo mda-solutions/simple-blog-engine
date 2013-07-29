@@ -51,7 +51,7 @@
 		<div class="sixteen columns">
 			<ul data-bind="foreach: items, visible: items().length > 0">
 				<li>
-					<a data-bind="attr: { href: hash, title: title }">
+					<a data-bind="click: $parent.goHash, attr: { href: hash, title: title, class: 'menu_item' }">
 						<span data-bind="html: title"></span>
 					</a>
 				</li>
@@ -154,8 +154,22 @@
 
 		    self.goHash = function()
 		    {
+		    	var hash = this.hash().split("/");
+		    	var post = hash[0].replace('#','');
 
-		    	console.log(this);
+		    	if ($("#" + post).length > 0)
+		    	{
+ 					$('html,body').animate({scrollTop: $("#" + post).offset().top},'slow');
+ 					return;
+				}
+
+				//load 'til post exists				
+				var nums = post.split('_');
+				var page = nums[1];
+
+				console.log(page);
+
+		    	
 		    }
 
 		    self.getPosts = function() 
@@ -190,7 +204,7 @@
 		    };		    		     				  
 		}	
 
-		ko.applyBindings(new BlogViewModel());			
+		ko.applyBindings(new BlogViewModel());		
 
 	</script>
 

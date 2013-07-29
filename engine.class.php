@@ -129,12 +129,15 @@ class Engine
 
       $cont   = 0;
       $folder = $this->settings["folder_entries"];
+      $items  = (int)$this->settings["items_per_page"];
       $posts  = new stdClass();
       $htmls  = (!$all) ? $this->sliceHtmls() : $this->htmls;
 
       foreach ($htmls as $html) 
       {
-        $file = $folder . "/" . $html;
+        $file      = $folder . "/" . $html;
+        $num       = $cont + 1;
+        $item_page = round($num / $items);
 
         if (file_exists($file)) 
         {                
@@ -142,8 +145,8 @@ class Engine
           $post->title   = self::titlezr($html);
           $post->content = file_get_contents($file);
           $post->date    = date ($this->settings['date_format'], filemtime($file));          
-          $post->id      = sprintf('post_%s_%s', $page, $cont);
-          $post->hash    = sprintf('#post_%s_%s/%s', $page, $cont, self::urlfy($post->title));
+          $post->id      = sprintf('post_%s_%s', $item_page, $num);
+          $post->hash    = sprintf('#post_%s_%s/%s', $item_page, $num, self::urlfy($post->title));
 
           $posts->$html = $post;
 
