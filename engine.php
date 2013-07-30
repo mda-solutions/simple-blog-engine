@@ -21,7 +21,11 @@
 
 		case 'posts':
 			echo $engine->getPostsJson($page);
-			break;			
+			break;	
+
+		case 'range':
+			echo $engine->getRangePostsJson($from, $to);
+			break;						
 		
 		default:
 			echo "No action!";

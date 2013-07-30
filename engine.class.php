@@ -101,13 +101,6 @@ class Engine
       $sorting_function($this->htmls);
    }
 
-   public function sliceHtmls()
-   {
-      $items = $this->settings["items_per_page"];
-      $init  = ($this->current_page - 1) * $items;
-      return array_slice($this->htmls, $init, $items);
-   }
-
    private static function urlfy($string)
    {
       $string =   strtolower(trim($string));
@@ -158,10 +151,58 @@ class Engine
           
    }
 
+   public function sliceHtmls($init = 0)
+   {
+      $items = $this->settings["items_per_page"];
+
+      if($init == 0)
+      {
+        $init  = ($this->current_page - 1) * $items;  
+      }
+      
+      return array_slice($this->htmls, $init, $items);
+   }
+
+   public function getRangePostsJson($page_from, $page_to)
+   {
+      $this->current_page = $page_from;
+
+      $folder = $this->settings["folder_entries"];
+      $items  = (int)$this->settings["items_per_page"];
+      $cont   = 0;
+      $posts  = new stdClass();
+      $init   = ($this->current_page - 1) * $items;
+      $end    = ($page_from * $items) - $init;
+      $htmls  = array_slice($this->htmls, $init, $end);
+
+      foreach ($htmls as $html) 
+      {
+        $file      = $folder . "/" . $html;
+        $num       = $cont + 1;
+        $item_page = round($num / $items);
+
+        if (file_exists($file)) 
+        {                
+          $post          = new stdClass();
+          $post->title   = self::titlezr($html);
+          $post->content = file_get_contents($file);
+          $post->date    = date ($this->settings['date_format'], filemtime($file));          
+          $post->id      = sprintf('post_%s_%s', $item_page, $num);
+          $post->hash    = sprintf('#post_%s_%s/%s', $item_page, $num, self::urlfy($post->title));
+
+          $posts->$html = $post;
+          $cont ++;
+        }  
+      }
+
+      return json_encode($posts);
+   }
+
    public function getPostsJson($page, $all = false, $isjson = true)
    {     
 
       $this->current_page = $page;
+
       if(!$all)
       {
         return $this->getSlicedPostsJson($isjson);

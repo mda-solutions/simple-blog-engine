@@ -163,12 +163,16 @@
  					return;
 				}
 
-				/*
+				
 				//load 'til post exists				
-				var nums = post.split('_');
-				var page = nums[1];
+				var nums      = post.split('_');
+				var page_to   = nums[1];
+				var page_from = parseInt($('#page').val());
 
-			    $.getJSON("engine.php?action=posts&page=" + page, function(data) 
+				console.log("from: " + page_from);
+				console.log("to: " + page_to);				
+
+			    $.getJSON("engine.php?action=range&from="+page_from+"&to="+page_to, function(data) 
 			    {			        
 			        var mappedPosts = $.map(data, function(_post) { return new Post(_post) });
 
@@ -182,9 +186,10 @@
 			        	return;
 			        }
 
-			        $('#page').val(page);
+			        $('#page').val(page_from);
+			        
 			    }); 
-			    */
+			    
 		    	
 		    }
 
