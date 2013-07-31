@@ -134,8 +134,7 @@
 		}			
 
 		function BlogViewModel() 
-		{
-		    
+		{		    
 		    var self   = this;
 		    self.items = ko.observableArray([]);		    
 		    self.posts = ko.observableArray([]);
@@ -154,7 +153,10 @@
 
 		    self.goHash = function()
 		    {
-		    	var hash = this.hash().split("/");
+		        var this_hash = (this.hash == undefined) ? window.location.hash : this.hash();
+		        if(this_hash == "") return
+
+		    	var hash = this_hash.split("/");
 		    	var post = hash[0].replace('#','');
 
 		    	if ($("#" + post).length > 0)
@@ -163,14 +165,10 @@
  					return;
 				}
 
-				
 				//load 'til post exists				
 				var nums      = post.split('_');
 				var page_to   = nums[1];
 				var page_from = parseInt($('#page').val());
-
-				console.log("from: " + page_from);
-				console.log("to: " + page_to);				
 
 			    $.getJSON("engine.php?action=range&from="+page_from+"&to="+page_to, function(data) 
 			    {			        
@@ -178,19 +176,23 @@
 
 			        if(mappedPosts.length > 0)
 			        {
+			        	
 				        $.each(mappedPosts, function(key, value)
 			        	{
 			        		self.posts.push(value);
-			        	});
-			        				        	
-			        	return;
+			        	});					
+			        	
 			        }
 
-			        $('#page').val(page_from);
+			    	if ($("#" + post).length > 0)
+			    	{
+	 					$('html,body').animate({scrollTop: $("#" + post).offset().top},'slow');
+	 					$('#page').val(page_from);
+	 					return;
+					}			        
 			        
-			    }); 
-			    
-		    	
+			    });   
+
 		    }
 
 		    self.getPosts = function() 
@@ -222,10 +224,13 @@
 
 			        $('#more_items').html('Ops! ya no hay más elementos.');
 			    }); 		    	
-		    };		    		     				  
+		    };
+
+		    self.goHash();				  
 		}	
 
-		ko.applyBindings(new BlogViewModel());		
+		ko.applyBindings(new BlogViewModel());
+
 
 	</script>
 
