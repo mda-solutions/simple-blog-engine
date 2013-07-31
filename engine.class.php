@@ -68,7 +68,18 @@ class Engine
       if($this->settings["order"] == "")
       {
         throw new Exception("order no esta definido", 1);        
-      }                   
+      }        
+
+      if($this->settings["base_url"] == "")
+      {
+        throw new Exception("base_url no esta definido", 1);
+      }
+
+      if($this->settings["blog_name"] == "")
+      {
+        throw new Exception("blog_name no esta definido", 1);
+      }       
+
    }
 
    private function readDirectory()
@@ -296,9 +307,9 @@ class Engine
         $item = self::getFeedItemTemplate();
 
         $item = str_replace('{TITLE}', $post->title, $item);
-        $item = str_replace('{LINK}', $post->title, $item);
+        $item = str_replace('{LINK}', $this->settings['base_url'], $item);
         $item = str_replace('{DATE}', $post->date, $item);
-        $item = str_replace('{GUID}', $post->title, $item);
+        $item = str_replace('{GUID}', $this->settings['base_url'] .  $post->hash, $item);
         $item = str_replace('{CONTENT}', htmlspecialchars($post->content), $item);
         $items .= $item;
       }
