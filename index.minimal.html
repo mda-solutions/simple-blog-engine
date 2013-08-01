@@ -1,0 +1,36 @@
+<html>
+<head>
+	<title>Minimal template</title>
+  	<script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+  	<script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js'></script>	
+</head>
+<body>
+
+		<ul data-bind="foreach: items, visible: items().length > 0" >
+			<li >
+				<a data-bind="click: $parent.goHash, attr: { href: hash, title: title, class: 'menu_item' }">
+					<span data-bind="html: title"></span>
+				</a>
+			</li>
+		</ul>
+
+		<!-- TEMPLATE PARA LOS POSTS-->
+		<div data-bind="foreach: posts, visible: posts().length > 0">
+			<a data-bind="attr: { id: id, title: title }">
+			    <h2 class="remove-bottom"  data-bind="text: title"></h2>
+			</a>			
+			<h5 data-bind="text: date"></h5>
+			<p data-bind="html: content"></p>
+			<hr />
+		</div>
+		<!-- TERMINA TEMPLATE PARA LOS POSTS-->
+
+		<div class="sixteen columns">
+			<a id="more_items" href="javascript:void(0);" data-bind="click: getPosts" class="full-width button">Mostrar m&aacute;s Elementos</a>
+			<hr>
+		</div>
+
+    <input type="hidden" value="1" id="page" name="page" />
+    <script type="text/javascript" src="engine.UI.js" ></script>
+</body>
+</html>

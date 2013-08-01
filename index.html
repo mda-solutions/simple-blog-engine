@@ -49,47 +49,47 @@
 	<div class="container">
 
 		<div class="sixteen columns">
-			<ul data-bind="foreach: items, visible: items().length > 0">
-				<li>
-					<a data-bind="click: $parent.goHash, attr: { href: hash, title: title, class: 'menu_item' }">
-						<span data-bind="html: title"></span>
-					</a>
-				</li>
-			</ul>
-		</div>
-
-		<div class="sixteen columns">
 			<h1 class="remove-bottom" style="margin-top: 40px">
 				<img src="https://googledrive.com/host/0B-QqAdv8dXkdb1hZZWF3ZmVuNWs/logo.png">
 			</h1>
-			<h4>Fast & Minimal MDA-Blog Engine 1.0</h4>
+			<h4>Minimal MDA-Blog Engine 1.0</h4>
 			<hr />
 		</div>
 		<div class="one-third column">
 			<h3>¿Qué es?</h3>
 			<p>
-				El "MDA-Blog Engine" es un motor para publicar un blog muy simple que no requiere instalación de base de datos o de librerías complicadas, únicamente consta de 2 archivos PHP, las publicaciones se hacen mediante archivos de texto o html individuales. No necesitas saber programar o instalar paquetes complejos.
+				"Minimal MDA-Blog Engine" es un motor para publicar un blog muy simple únicamente consta de 2 archivos PHP, las publicaciones se hacen mediante archivos de html individuales por post.
 			</p>
 		</div>
 		<div class="one-third column">
-			<h3>¿Qué necesito?</h3>
-			<p>El "MDA-Blog Engine" solo necesita:</p>
-			<ul class="square">
-				<li><strong>Un servidor web que ejecute PHP 5.2</strong>, Ha sido probado con Apache 2 y PHP 5.2, pero en Windows y IIS no debe haber problema.</li>
-				<li><strong>Una carpeta pública</strong>: puede ser un acceso FTP o incluso en Google Drive, esto para publicar los archivos de texto/html</li>				
-			</ul>
+			<h3>Características</h3>
+				<ul class="square">
+					<li>La interfaz es totalmente AJAX hecho con <strong>Knockout.js</strong></li>
+					<li><strong>URL Friendly</strong></li>
+					<li>Generador <strong>RSS</strong></li>
+					<li>No necesita <strong>base de datos</strong></li>
+					<li>No necesita motor de plantillas, <strong>puedes adaptar cualquier HTML </strong> </li>			
+				</ul>
 		</div>
 		<div class="one-third column">
 			<h3>Download</h3>
-			<p>Puedes clonar el repositorio en github: <br />
-				<br>clone https://github.com/mda-solutions/simple-blog-engine.git
+			<p style="text-align:center">Puedes clonar el repositorio en github: <br />
+				<br><strong>clone https://github.com/mda-solutions/simple-blog-engine.git</strong>
 				<br><br> <a href="https://github.com/mda-solutions/simple-blog-engine/archive/master.zip">o simplemente descargar el zip</a>
 			</p>
 		</div>
 
 		<hr />
 
-
+		<div class="sixteen columns">
+			<ul data-bind="foreach: items, visible: items().length > 0" style="text-align: center;">
+				<li style="display: inline-block; font-size:20px; margin-left:5px;">
+					<a data-bind="click: $parent.goHash, attr: { href: hash, title: title, class: 'menu_item' }">
+						<span data-bind="html: title"></span>
+					</a>
+				</li>
+			</ul>
+		</div>
 		<!-- TEMPLATE PARA LOS POSTS-->
 		<div class="sixteen columns" data-bind="foreach: posts, visible: posts().length > 0">
 			<a data-bind="attr: { id: id, title: title }">
@@ -99,6 +99,7 @@
 			<p data-bind="html: content"></p>
 			<hr />
 		</div>
+
 		<!-- TERMINA TEMPLATE PARA LOS POSTS-->
 
 		<div class="sixteen columns">

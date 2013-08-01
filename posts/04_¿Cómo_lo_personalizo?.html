@@ -1,0 +1,50 @@
+<br>
+<p>
+	Es MUY fácil, solo edita el index.html en tu editor favorito (hasta Dreamwaver vale!) y realiza los cambios que quieras,El template que se proporciona, esta basado en "Skeleton", por lo que te puedes dirigir a la documentación en: <a target="_blank" href="http://getskeleton.com">getskeleton.com</a> o bien, poner tu propio HTML, para ello considera: <br>
+	<ul class="square">		
+		<li>Incluir el archivo de JQuery (1.8+) en el HEAD </li>
+		<li>Incluir el archivo de knockoutjs (2.3+) en el HEAD </li>
+		<li>Incluir antes de cerrar la etiqueta BODY el archivo "engine.UI.js"</li>
+		<li>
+			Incluir el siguiente input: &lt;input type=&quot;hidden&quot; value=&quot;1&quot; id=&quot;page&quot; name=&quot;page&quot; /&gt;
+		</li>
+	</ul>
+
+	<p>
+		Incluir el siguiente código en tu página:
+<pre>
+		&lt;!-- TEMPLATE PARA LOS POSTS--&gt;
+		&lt;div data-bind=&quot;foreach: posts, visible: posts().length &gt; 0&quot;&gt;
+			&lt;a data-bind=&quot;attr: { id: id, title: title }&quot;&gt;
+			    &lt;h2 data-bind=&quot;text: title&quot;&gt;&lt;/h2&gt;
+			&lt;/a&gt;			
+			&lt;h5 data-bind=&quot;text: date&quot;&gt;&lt;/h5&gt;
+			&lt;p data-bind=&quot;html: content&quot;&gt;&lt;/p&gt;
+			&lt;hr /&gt;
+		&lt;/div&gt;
+		&lt;!-- TERMINA TEMPLATE PARA LOS POSTS--&gt;
+
+		&lt;div &gt;
+			&lt;a id=&quot;more_items&quot; href=&quot;javascript:void(0);&quot; data-bind=&quot;click: getPosts&quot; class=&quot;full-width button&quot;&gt;Mostrar m&aacute;s Elementos&lt;/a&gt;
+			&lt;hr&gt;
+		&lt;/div&gt;		
+	</pre>
+	</p>
+
+	<p>
+		Para el menú utiliza el siguiente template:
+
+		<pre>
+			&lt;ul data-bind=&quot;foreach: items, visible: items().length &gt; 0&quot; style=&quot;text-align: center;&quot;&gt;
+				&lt;li style=&quot;display: inline-block; font-size:20px; margin-left:5px;&quot;&gt;
+					&lt;a data-bind=&quot;click: $parent.goHash, attr: { href: hash, title: title, class: 'menu_item' }&quot;&gt;
+						&lt;span data-bind=&quot;html: title&quot;&gt;&lt;/span&gt;
+					&lt;/a&gt;
+				&lt;/li&gt;
+			&lt;/ul&gt;
+		</pre>
+	</p>
+	<p> Puedes ver la versión de este blog en con una plantilla simple y sin estilos en: <a href="index.minimal.html">Ver plantilla básica</a> 
+
+	</p>
+</p>
