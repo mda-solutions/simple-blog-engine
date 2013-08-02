@@ -1,4 +1,21 @@
-
+/**
+ * 
+ *     repo:   https://github.com/mda-solutions
+ *     author: moises.rangel@gmail.com
+ *
+ * Licensed under the MIT License (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at
+ *
+ *     http://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+  
 		var page = parseInt($('#page').val());
 
 		function Item(data) 
@@ -23,11 +40,23 @@
 		    self.items = ko.observableArray([]);		    
 		    self.posts = ko.observableArray([]);
 
+			self.menu = function()
+			{
+			    $.getJSON("engine.php?action=menu", function(data) 
+			    {
+			        var mappedItems = $.map(data, function(item) { return new Item(item) });
+			        self.items(mappedItems);
+			    });
+			};		    
+
 		    self.goHash = function()
 		    {
 		        var this_hash = (this.hash == undefined) ? window.location.hash : this.hash();
-		        self.init();
-		        if(this_hash == "") return
+		        if(this_hash == "")
+		        {		        	
+		        	self.init();
+		        	return;
+		        }
 
 		        location.hash = this_hash;
 
@@ -40,12 +69,20 @@
  					return;
 				}
 
+				//load first page if not exists
+				var load_first_page = true;
+	    		if ($("#posts_1_1").length > 0)
+		    	{
+					load_first_page = false;
+				}
+
 				//load 'til post exists				
 				var nums      = post.split('_');
 				var page_to   = nums[1];
 				var page_from = parseInt($('#page').val());
+				var url       = "engine.php?first="+load_first_page+"&action=range&from="+page_from+"&to="+page_to;
 
-			    $.getJSON("engine.php?action=range&from="+page_from+"&to="+page_to, function(data) 
+			    $.getJSON(url, function(data) 
 			    {			        
 			        var mappedPosts = $.map(data, function(_post) { return new Post(_post) });
 
@@ -53,12 +90,9 @@
 			        {			        	
 				        $.each(mappedPosts, function(key, value)
 			        	{
-			        		console.log(value.id());
 			        		self.posts.push(value);
 			        	});					
 			        }
-
-			        console.log($("#" + post).length);
 
 			    	if ($("#" + post).length > 0)
 			    	{
@@ -71,6 +105,7 @@
 
 		    self.getPosts = function() 
 		    {		    	
+		    	
 		    	page = parseInt($('#page').val());
 		    	page ++;
 
@@ -102,12 +137,6 @@
 
 		    self.init = function()
 		    {
-			    $.getJSON("engine.php?action=menu", function(data) 
-			    {
-			        var mappedItems = $.map(data, function(item) { return new Item(item) });
-			        self.items(mappedItems);
-			    });
-
 			    $.getJSON("engine.php?action=posts&page=" + page, function(data) 
 			    {
 			        var mappedPosts = $.map(data, function(post) { return new Post(post) });
@@ -115,6 +144,7 @@
 			    }); 
 		    }
 
+		    self.menu();
 		    self.goHash();				  
 		}	
 

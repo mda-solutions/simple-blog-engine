@@ -1,8 +1,10 @@
+
 <?php
 
 /**
  * 
- *     https://github.com/mda-solutions
+ *     repo:   https://github.com/mda-solutions
+ *     author: moises.rangel@gmail.com
  *
  * Licensed under the MIT License (the "License"); you may
  * not use this file except in compliance with the License. You may obtain
@@ -174,7 +176,7 @@ class Engine
       return array_slice($this->htmls, $init, $items);
    }
 
-   public function getRangePostsJson($page_from, $page_to)
+   public function getRangePostsJson($page_from, $page_to, $getFirstPage = false)
    {
 
       $this->current_page = $page_from;
@@ -185,8 +187,17 @@ class Engine
       $posts  = new stdClass();
 
       $init   = ($page_from * $items);
+      if($getFirstPage)
+      {
+        $init = $init - $items;
+      }
+
       $diff   = $page_to - $page_from;
       $end    = ($diff == 1) ? $items : $items * $diff;
+      if($getFirstPage)
+      {
+        $end = $end + $items;
+      }
 
       $htmls  = array_slice($this->htmls, $init, $end);
       
