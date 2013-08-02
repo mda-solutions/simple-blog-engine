@@ -119,11 +119,11 @@ class Engine
       $string =   strtolower(trim($string));
 
       $string = str_replace(' ', '-', $string);
-      $string = str_replace('Ã¡', 'a', $string);
-      $string = str_replace('Ã©', 'e', $string);
-      $string = str_replace('Ã­', 'i', $string);
-      $string = str_replace('Ã³', 'o', $string);
-      $string = str_replace('Ãº', 'u', $string);
+      $string = str_replace('á', 'a', $string);
+      $string = str_replace('é', 'e', $string);
+      $string = str_replace('í', 'i', $string);
+      $string = str_replace('ó', 'o', $string);
+      $string = str_replace('ú', 'u', $string);
 
       $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
       
